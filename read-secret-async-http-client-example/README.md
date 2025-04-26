@@ -1,4 +1,4 @@
-#  Read Secret using VaultCourier with URLSession
+#  Read Secret using VaultCourier with AsyncHTTPClient
 
 An example project using VaultCourier
 
@@ -6,7 +6,7 @@ This example is a follow-up of write-secret-urlsession-example or write-secret-a
 
 ## Usage
 
-> Important: This example is deliberately simplified and is intended for illustrative purposes only. In particular, never install a Vault instance in dev-mode in a production environment.
+> Important: This example is deliberately simplified and is intended for illustrative purposes only. In particular, never use a Vault instance in dev-mode in a production environment.
 
 Start your vault instance instance in dev-mode either with Hashicorp Vault
 
