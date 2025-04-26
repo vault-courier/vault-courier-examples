@@ -2,7 +2,7 @@
 
 An example project using VaultCourier
 
-This example is a follow-up of write-secret-urlsession-example or write-secret-async-http-client-example. Please run one of them before continuing here.
+This example is a follow-up of [write-secret-urlsession-example](https://github.com/vault-courier/vault-courier-examples/tree/main/write-secret-urlsession-example) or [write-secret-async-http-client-example](https://github.com/vault-courier/vault-courier-examples/tree/main/write-secret-async-http-client-example). Please run one of them before continuing here.
 
 ## Usage
 
