@@ -39,7 +39,7 @@ struct create_static_role_example: AsyncParsableCommand {
         try await vaultClient.authenticate()
 
         try await vaultClient.create(staticRole: .init(vaultRoleName: roleName,
-                                                       databaseUsername: "static_role_username",
+                                                       databaseUsername: "read_only",
                                                        databaseConnectionName: connectionName,
                                                        rotationPeriod: "1d"),
                                      enginePath: enginePath)

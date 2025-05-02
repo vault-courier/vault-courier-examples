@@ -1,8 +1,8 @@
-#  Create Dynamic Role
+#  Create Static Role
 
 An example project using VaultCourier.
 
-This example is part of the tutorial [understanding dynamic roles](https://swiftpackageindex.com/vault-courier/vault-courier/main/tutorials/documentation/understand-dynamic-roles), section 3 and is a follow-up to [configure-pg-connection-example](https://github.com/vault-courier/vault-courier-examples/tree/main/configure-pg-connection-example). It's a CLI client that uses a configured connection between vault and a [Postgres](https://www.postgresql.org) database to generate dynamic credentials.
+It's a CLI client that uses a configured connection between vault and a [Postgres](https://www.postgresql.org) database to generate static credentials.
 
 ## Usage
 
@@ -50,12 +50,12 @@ Finally, build and run the VaultCourier client CLI using the same arguments as g
 
 ```sh
 % swift build
-% $(swift build --show-bin-path)/create-dynamic-role-example -e "path/to/database/mount" -c "my_connection" -r "read_only"
-lease_id           path/to/database/mount/creds/read_only/TVo0C6muW9bzvlrREx8pZKKr
-lease_duration     3600
-lease_renewable    true
+% $(swift build --show-bin-path)/create-static-role-example -e "path/to/database/mount" -c "my_connection" -r "read_only"
+lease_id           
+lease_duration     86400
+lease_renewable    false
 password           52TkXJAM43E-G7IBgV9c
-username           v-token-read_onl-EkLbrLOfzIiGuIVmtEx9-1746220628 
+username           read_only 
 ```
 
 You can verified that the user was created in the database with
@@ -68,7 +68,7 @@ You can verified that the user was created in the database with
                      usename                      |        valuntil
 --------------------------------------------------+------------------------
  vault_root                                       |
- v-token-read_onl-EkLbrLOfzIiGuIVmtEx9-1746220628 | 2025-06-03 20:28:25+00
+ read_only                                        |
 
 ```
 
