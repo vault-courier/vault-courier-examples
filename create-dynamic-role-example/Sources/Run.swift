@@ -26,10 +26,10 @@ import struct Foundation.URL
 @main
 struct create_dynamic_role_example: AsyncParsableCommand {
     @Option(name: .shortAndLong)
-    var enginePath: String = "path/to/database/mount" // "sql_database"
+    var enginePath: String = "sql_database"
 
     @Option(name: .shortAndLong)
-    var connectionName: String = "my-connection" //"pg_connection"
+    var connectionName: String = "pg_connection"
 
     @Option(name: .shortAndLong)
     var roleName: String = "read_only"
