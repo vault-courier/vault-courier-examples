@@ -2,7 +2,7 @@
 
 An example project using VaultCourier.
 
-This example is part of the tutorial [understanding dynamic roles](https://swiftpackageindex.com/vault-courier/vault-courier/main/tutorials/documentation/understand-dynamic-roles), section 3 and is a follow-up to [configure-pg-connection-example](https://github.com/vault-courier/vault-courier-examples/tree/main/configure-pg-connection-example). It's a CLI client that uses a configured connection between vault and a [Postgres](https://www.postgresql.org) database to generate dynamic credentials.
+This example is part of the tutorial [understanding dynamic roles](https://swiftpackageindex.com/vault-courier/vault-courier/main/tutorials/vaultcourier/understand-dynamic-roles), section 3 and is a follow-up to [configure-pg-connection-example](https://github.com/vault-courier/vault-courier-examples/tree/main/configure-pg-connection-example). It's a CLI client that uses a configured connection between vault and a [Postgres](https://www.postgresql.org) database to generate dynamic credentials.
 
 ## Usage
 
