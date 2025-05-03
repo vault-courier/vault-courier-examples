@@ -6,8 +6,7 @@ This example is part of the tutorial [understanding dynamic roles](https://swift
 
 ## Usage
 
-> Important: This example is deliberately simplified and is intended for illustrative purposes only. In particular, never use a Vault instance in dev-mode in a production deployment, and consider using a dedicated vault root user when interacting with databases.
-
+> Important: This example is deliberately simplified and is intended for illustrative purposes only. In particular, never use a Vault instance in dev-mode in a production deployment. It is strongly recommended to create a dedicated database user specifically for Vault to use.
 Start your vault instance instance in dev-mode either with Hashicorp Vault
 
 ```sh

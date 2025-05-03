@@ -2,11 +2,11 @@
 
 An example project using VaultCourier.
 
-It's a CLI client that uses a configured connection between vault and a [Postgres](https://www.postgresql.org) database to generate static credentials.
+This example is part of the tutorial [understanding dynamic roles](https://swiftpackageindex.com/vault-courier/vault-courier/main/tutorials/documentation/understand-dynamic-roles), section 4 and is a follow-up to [configure-pg-connection-example](https://github.com/vault-courier/vault-courier-examples/tree/main/configure-pg-connection-example). It's a CLI client that uses a configured connection between vault and a [Postgres](https://www.postgresql.org) database to generate static credentials.
 
 ## Usage
 
-> Important: This example is deliberately simplified and is intended for illustrative purposes only. In particular, never use a Vault instance in dev-mode in a production deployment, and consider using a dedicated vault root user when interacting with databases.
+> Important: This example is deliberately simplified and is intended for illustrative purposes only. In particular, never use a Vault instance in dev-mode in a production deployment. It is strongly recommended to create a dedicated database user specifically for Vault to use.
 
 Start your vault instance instance in dev-mode either with Hashicorp Vault
 
@@ -23,9 +23,9 @@ or with OpenBao
 In another terminal spin up a PostgreSQL container with docker:
 
 ```sh
-$ docker pull postgres:latest
+% docker pull postgres:latest
 
-$ docker run \
+% docker run \
     --detach \
     --name learn-postgres \
     -e POSTGRES_USER=vault_root \
@@ -35,13 +35,21 @@ $ docker run \
     --rm \
     postgres
 
-$ docker exec -i \
+% docker exec -i \
     learn-postgres \
     psql -U vault_root -d postgres -c "CREATE ROLE \"read_only\" NOINHERIT;"
 
-$ docker exec -i \
+% docker exec -i \
   learn-postgres \
   psql -U vault_root -d postgres -c "GRANT SELECT ON ALL TABLES IN SCHEMA public TO \"read_only\";"
+
+% docker exec -i \
+    learn-postgres \
+    psql -U vault_root -d postgres -c "CREATE ROLE \"static_role_username\" LOGIN PASSWORD 'my_password';"
+
+% docker exec -i \
+  learn-postgres \
+  psql -U vault_root -d postgres -c "GRANT \"read_only\" TO \"static_role_username\";"
 ```
 
 If not done before, run [configure-pg-connection-example](https://github.com/vault-courier/vault-courier-examples/tree/main/configure-pg-connection-example).
@@ -50,26 +58,19 @@ Finally, build and run the VaultCourier client CLI using the same arguments as g
 
 ```sh
 % swift build
-% $(swift build --show-bin-path)/create-static-role-example -e "path/to/database/mount" -c "my_connection" -r "read_only"
-lease_id           
+% $(swift build --show-bin-path)/create-static-role-example -e "path/to/database/mount" -c "my_connection"
+
 lease_duration     86400
 lease_renewable    false
 password           52TkXJAM43E-G7IBgV9c
-username           read_only 
+username           static_role_username 
 ```
 
-You can verified that the user was created in the database with
+### Clean up
+
+You can stop the Vault dev server with `Ctrl+C`, and the postgres container with
 
 ```sh
-% docker exec -i \
-  learn-postgres \
-  psql -U vault_root -d postgres -c "SELECT usename, valuntil FROM pg_user;"
-
-                     usename                      |        valuntil
---------------------------------------------------+------------------------
- vault_root                                       |
- read_only                                        |
-
+% docker stop $(docker ps -f name=learn-postgres -q)
 ```
-
 
