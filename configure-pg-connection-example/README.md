@@ -2,7 +2,7 @@
 
 An example project using VaultCourier
 
-This example is part of the tutorial [understanding dynamic roles](https://swiftpackageindex.com/vault-courier/vault-courier/main/tutorials/documentation/understand-dynamic-roles), section 2. This CLI example tool, built with VaultCourier, is used to:
+This example is part of the tutorial [understanding dynamic roles](https://swiftpackageindex.com/vault-courier/vault-courier/main/tutorials/vaultcourier/understand-dynamic-roles), section 2. This CLI example tool, built with VaultCourier, is used to:
 
 - Enable the database secrets engine at a specified path in Vault or OpenBao, and
 - Configure a connection to a [Postgres](https://www.postgresql.org) database.
