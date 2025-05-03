@@ -26,31 +26,29 @@ import struct Foundation.URL
 @main
 struct create_static_role_example: AsyncParsableCommand {
     @Option(name: .shortAndLong)
-    var enginePath: String = "sql_database"
+    var enginePath: String = "database"
 
     @Option(name: .shortAndLong)
     var connectionName: String = "pg_connection"
 
-    @Option(name: .shortAndLong)
-    var roleName: String = "read_only"
+    var roleName: String = "static_role"
 
     mutating func run() async throws {
         let vaultClient = try Self.makeVaultClient()
         try await vaultClient.authenticate()
 
         try await vaultClient.create(staticRole: .init(vaultRoleName: roleName,
-                                                       databaseUsername: "read_only",
+                                                       databaseUsername: "static_role_username",
                                                        databaseConnectionName: connectionName,
                                                        rotationPeriod: "1d"),
                                      enginePath: enginePath)
 
         let response = try await vaultClient.databaseCredentials(staticRole: roleName, enginePath: enginePath)
         print("""
-        lease_id           \(response?.leaseId ?? "")
-        lease_duration     \(response?.leaseDuration ?? 0)
         lease_renewable    \(response?.renewable ?? false)
         password           \(response?.password ?? "")
         username           \(response?.username ?? "")    
+        rotation           \(String(describing: response?.rotation))
         """)
     }
 
