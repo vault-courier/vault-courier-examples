@@ -26,7 +26,7 @@ import struct Foundation.URL
 @main
 struct configure_pg_connection_example: AsyncParsableCommand {
     @Option(name: .shortAndLong)
-    var enginePath: String = "sql_database"
+    var enginePath: String = "database"
 
     @Option(name: .shortAndLong)
     var connectionName: String = "pg_connection"
@@ -78,11 +78,11 @@ struct configure_pg_connection_example: AsyncParsableCommand {
         let vaultPassword = "root_password"
         let config = PostgresConnectionConfiguration(connection: name,
                                                      pluginName: "postgresql-database-plugin",
-                                                     allowedRoles: ["read_only"],
+                                                     allowedRoles: ["dynamic_role", "static_role"],
                                                      connectionUrl: connectionURL,
                                                      username: vaultUsername,
                                                      password: vaultPassword,
-                                                     passwordAuthentication: "scram-sha-256")
+                                                     passwordAuthentication: .scramSHA256)
         return config
     }
 }
@@ -93,7 +93,7 @@ extension DatabaseConnectionResponse: @retroactive CustomDebugStringConvertible 
                 allowed_roles: \(allowedRoles)
                 connection_url: \(connectionURL?.debugDescription.removingPercentEncoding ?? "<n/a>")
                 connection_username: \(username)
-                password_authentication: \(authMethod)
+                password_authentication: \(authMethod.flatMap({$0.rawValue}) ?? "unknown")
                 plugin_name: \(plugin?.name ?? "<n/a>")
                 """
     }
