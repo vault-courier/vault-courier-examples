@@ -2,7 +2,10 @@
 
 An example project using VaultCourier
 
-This example is part of the tutorial [understanding dynamic roles](https://swiftpackageindex.com/vault-courier/vault-courier/main/tutorials/documentation/understand-dynamic-roles), section 2. It's a CLI client that enables the vault's database mount and creates a connection between Vault/OpenBao and a [Postgres](https://www.postgresql.org) database.
+This example is part of the tutorial [understanding dynamic roles](https://swiftpackageindex.com/vault-courier/vault-courier/main/tutorials/documentation/understand-dynamic-roles), section 2. This CLI example tool, built with VaultCourier, is used to:
+
+- Enable the database secrets engine at a specified path in Vault or OpenBao, and
+- Configure a connection to a [Postgres](https://www.postgresql.org) database.
 
 ## Usage
 
@@ -45,7 +48,7 @@ $ docker exec -i \
 ```
 
 
-Finally, build and run the VaultCourier client CLI using:
+Finally, build and run the example. In the terminal you can use:
 
 ```sh
 % swift build
