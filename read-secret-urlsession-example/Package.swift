@@ -22,7 +22,7 @@ let package = Package(
     platforms: [.macOS(.v15)],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.5.0"),
-        .package(url: "https://github.com/vault-courier/vault-courier", branch: "main"),
+        .package(url: "https://github.com/vault-courier/vault-courier", from: "0.0.2"),
         .package(url: "https://github.com/apple/swift-openapi-urlsession", from: "1.0.0")
     ],
     targets: [

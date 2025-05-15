@@ -1,5 +1,5 @@
 {
-  "originHash" : "e42f9876ae66f427325a3a6c6725e94e0b9f7bfd2f81e5a4865b57eaf1d5784d",
+  "originHash" : "a814e7f65a90777270fd0648ce8f07b1c2e849ac578116b9f319b56a0d57dd5b",
   "pins" : [
     {
       "identity" : "async-http-client",
@@ -195,8 +195,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vault-courier/vault-courier",
       "state" : {
-        "branch" : "main",
-        "revision" : "a3c7c5c34879e17b7193497c4bf78599efffdd19"
+        "revision" : "28b4f74e255baf54673b2ab599bd735365937203",
+        "version" : "0.0.2"
       }
     },
     {
