@@ -40,7 +40,7 @@ struct create_static_role_example: AsyncParsableCommand {
         try await vaultClient.create(staticRole: .init(vaultRoleName: roleName,
                                                        databaseUsername: "static_role_username",
                                                        databaseConnectionName: connectionName,
-                                                       rotationPeriod: "1d"),
+                                                       rotation: .period(.seconds(60*60*24))),
                                      enginePath: enginePath)
 
         let response = try await vaultClient.databaseCredentials(staticRole: roleName, enginePath: enginePath)
