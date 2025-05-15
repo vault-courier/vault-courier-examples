@@ -77,7 +77,6 @@ struct configure_pg_connection_example: AsyncParsableCommand {
         let vaultUsername = "vault_root"
         let vaultPassword = "root_password"
         let config = PostgresConnectionConfiguration(connection: name,
-                                                     pluginName: "postgresql-database-plugin",
                                                      allowedRoles: ["dynamic_role", "static_role"],
                                                      connectionUrl: connectionURL,
                                                      username: vaultUsername,

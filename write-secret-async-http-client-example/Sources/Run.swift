@@ -26,6 +26,12 @@ import struct Foundation.URL
 
 @main
 struct write_secret_async_http_client_example: AsyncParsableCommand {
+    @Option(name: .shortAndLong)
+    var key: String = "dev-eu-central-1"
+
+    @Option(name: .shortAndLong)
+    var secret: String = "my_secret_api_key"
+
     static func makeVaultClient() throws -> VaultClient {
         let vaultURL = URL(string: "http://127.0.0.1:8200/v1")!
         let config = VaultClient.Configuration(apiURL: vaultURL)
@@ -50,10 +56,10 @@ struct write_secret_async_http_client_example: AsyncParsableCommand {
         let vaultClient = try Self.makeVaultClient()
         try await vaultClient.authenticate()
 
-        let secret = Secret(apiKey: "my_secret_api_key")
+        let secret = Secret(apiKey: secret)
 
         do {
-            guard let response = try await vaultClient.writeKeyValue(secret: secret, key: "dev-eu-central-1")
+            guard let response = try await vaultClient.writeKeyValue(secret: secret, key: key)
             else {
                 fatalError("Unable to write secret. Please check your Vault configuration has the same root token")
             }

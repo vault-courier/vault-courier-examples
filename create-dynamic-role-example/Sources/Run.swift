@@ -43,8 +43,8 @@ struct create_dynamic_role_example: AsyncParsableCommand {
         ]
         try await vaultClient.create(dynamicRole: .init(vaultRoleName: roleName,
                                                         databaseConnectionName: connectionName,
-                                                        defaultTTL: "5m",
-                                                        maxTTL: "1h",
+                                                        defaultTTL: .seconds(5*60),
+                                                        maxTTL: .seconds(60*60),
                                                         creationStatements: creationStatements),
                                      enginePath: enginePath)
 
