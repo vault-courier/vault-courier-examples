@@ -48,15 +48,12 @@ struct write_secret_urlsession_example: AsyncParsableCommand {
         let secret = Secret(apiKey: "my_secret_api_key")
 
         do {
-            guard let response = try await vaultClient.writeKeyValue(secret: secret, key: "dev-eu-central-1")
-            else {
-                fatalError("Unable to write secret. Please check your Vault configuration has the same root token")
-            }
+            let response = try await vaultClient.writeKeyValue(secret: secret, key: "dev-eu-central-1")
 
             print("""
                 Secret written successfully!
-                created_time: \(response.data.createdTime!)
-                version: \(response.data.version!)
+                created_time: \(response.createdAt)
+                version: \(response.version)
                 """)
         } catch {
             print("Unable to write secret: " + String(reflecting: error))

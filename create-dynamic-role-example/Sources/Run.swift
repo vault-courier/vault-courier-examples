@@ -50,11 +50,11 @@ struct create_dynamic_role_example: AsyncParsableCommand {
 
         let response = try await vaultClient.databaseCredentials(dynamicRole: roleName, enginePath: enginePath)
         print("""
-        lease_id           \(response?.leaseId ?? "")
-        lease_duration     \(response?.leaseDuration ?? 0)
-        lease_renewable    \(response?.renewable ?? false)
-        password           \(response?.password ?? "")
-        username           \(response?.username ?? "")    
+        lease_id           \(response.leaseId ?? "")
+        lease_duration     \(response.leaseDuration ?? 0)
+        lease_renewable    \(response.renewable ?? false)
+        password           \(response.password)
+        username           \(response.username)    
         """)
     }
 
