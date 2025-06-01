@@ -45,10 +45,10 @@ struct create_static_role_example: AsyncParsableCommand {
 
         let response = try await vaultClient.databaseCredentials(staticRole: roleName, enginePath: enginePath)
         print("""
-        lease_renewable    \(response?.renewable ?? false)
-        password           \(response?.password ?? "")
-        username           \(response?.username ?? "")    
-        rotation           \(String(describing: response?.rotation))
+        lease_renewable    \(response.renewable ?? false)
+        password           \(response.password)
+        username           \(response.username)    
+        rotation           \(String(describing: response.rotation))
         """)
     }
 
