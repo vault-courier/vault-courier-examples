@@ -53,6 +53,9 @@ extension VaultAdmin {
         )
         @Argument var app: App
 
+        /// Path to pkl file with app configuration
+        @Argument var config: String
+
         @Option(name: .shortAndLong)
         var outputFile: String = "./approle_secret_id.txt"
 
@@ -65,22 +68,21 @@ extension VaultAdmin {
             let vaultClient = try makeVaultClient()
             try await vaultClient.authenticate()
 
-            try await generateSecretID(app, vaultClient: vaultClient)
+            let vaultConfig = try await VaultAdminConfig.loadFrom(source: .path(config))
+
+            try await generateSecretID(app, config: vaultConfig, vaultClient: vaultClient)
         }
 
-        func generateSecretID(_ app: App, vaultClient: VaultClient) async throws {
-            let appRoleName = switch app {
-                case .todo:
-                    "server_app_role"
-                case .migrator:
-                    "migrator_app_role"
+        func generateSecretID(_ app: App, config: VaultAdminConfig.Module, vaultClient: VaultClient) async throws {
+            guard let appRole = config.authMethod.appRoles[app.rawValue] else {
+                throw VaultOperationsError.missingApproleConfiguration("Missing '\(app.rawValue)' AppRole Config in pkl file")
             }
             print("Generating Approle credentials for '\(app.rawValue)' app...")
 
             // Generate SecretID for the given app
             let tokenResponse = try await vaultClient.generateAppSecretId(
                 capabilities: .init(
-                    roleName: appRoleName
+                    appRole.tokenConfig
                 )
             )
             let secretID: String = switch tokenResponse {
@@ -92,8 +94,8 @@ extension VaultAdmin {
             try secretID.write(to: URL(filePath: self.outputFile), atomically: true, encoding: .utf8)
             print("SecretID successfully written to \(outputFile)")
 
-            let roleIdResponse = try await vaultClient.appRoleID(name: appRoleName)
-            print("\(app.rawValue) app roleID: \(roleIdResponse.roleId)")
+            let roleIdResponse = try await vaultClient.appRoleID(name: appRole.properties.role_name)
+            print("'\(app.rawValue)' app roleID: \(roleIdResponse.roleId)")
         }
     }
 
@@ -102,105 +104,63 @@ extension VaultAdmin {
             abstract: "Provision vault policies, approles and sets the database secret mount."
         )
 
+        /// Path to pkl file with app configuration
+        @Argument var config: String
+
         func run() async throws {
             let vaultClient = try makeVaultClient()
             try await vaultClient.authenticate()
 
-            try await updatePolicies(vaultClient: vaultClient)
-            try await provisionDatabase(vaultClient: vaultClient)
-            try await configureAppRole(vaultClient: vaultClient)
+            let config = try await VaultAdminConfig.loadFrom(source: .path(config))
+
+            try await updatePolicies(config: config, vaultClient: vaultClient)
+            try await provisionDatabase(config: config, vaultClient: vaultClient)
+            try await configureAppRole(config: config, vaultClient: vaultClient)
         }
 
-        func updatePolicies(vaultClient: VaultClient) async throws {
-            let policies = [
-                "todos": "path \"database/static-creds/*\" { capabilities = [\"read\"] }",
-                "migrator": "path \"database/creds/*\" { capabilities = [\"read\"] }"
-            ]
-
-            for (name, policy) in policies {
-                try await vaultClient.createPolicy(name: name, hclPolicy: policy)
-                print("Policy '\(name)' written.")
+        func updatePolicies(config: VaultAdminConfig.Module, vaultClient: VaultClient) async throws {
+            for policy in config.policies {
+                try await vaultClient.createPolicy(name: policy.name, hclPolicy: policy.payload)
+                print("Policy '\(policy.name)' written.")
             }
         }
 
-        func provisionDatabase(vaultClient: VaultClient) async throws {
-            let databaseMountPath = "database"
-            let databaseConnection = "pg_connection"
-            let staticRoleName = "static_server_role"
-            let dynamicRoleName = "dynamic_migrator_role"
-
+        func provisionDatabase(config: VaultAdminConfig.Module, vaultClient: VaultClient) async throws {
             // Enable Database secret engine
-            try await vaultClient.enableSecretEngine(mountConfig: .init(mountType: "database", path: databaseMountPath))
-            print("Database secrets engine enabled at '\(databaseMountPath)'.")
+            try await vaultClient.enableSecretEngine(mountConfig: .init(config.database.mount))
+            print("Database secrets engine enabled at '\(config.database.mount.path)'.")
 
             // Create connection between vault and a postgresql database
             try await vaultClient.databaseConnection(
-                configuration: .init(
-                    connection: databaseConnection,
-                    allowedRoles: [
-                        staticRoleName,
-                        dynamicRoleName
-                    ],
-                    connectionUrl: "postgresql://{{username}}:{{password}}@127.0.0.1:5432/postgres?sslmode=disable",
-                    username: "vault_root",
-                    password: "root_password"),
-                enginePath: databaseMountPath
+                configuration: .init(config.database.connection),
+                enginePath: config.database.mount.path
             )
 
             // Create static role
             try await vaultClient.create(
-                staticRole: .init(
-                    vaultRoleName: staticRoleName,
-                    databaseUsername: "todos_user",
-                    databaseConnectionName: databaseConnection,
-                    rotation: .period(.seconds(3600*60*24*28)),
-                    credentialType: .password),
-                enginePath: databaseMountPath
+                staticRole: try config.database.staticRole.create,
+                enginePath: config.database.mount.path
             )
-            print("Static role '\(staticRoleName)' created.")
+            print("Static role '\(config.database.staticRole.vault_role_name)' created.")
 
             // Create dynamic role
             try await vaultClient.create(
-                dynamicRole: .init(
-                    vaultRoleName: dynamicRoleName,
-                    databaseConnectionName: databaseConnection,
-                    defaultTTL: .seconds(120),
-                    creationStatements: [
-                        #"CREATE ROLE "{{name}}" WITH SUPERUSER LOGIN PASSWORD '{{password}}';"#
-                    ],
-                    credentialType: .password
-                ),
-                enginePath: databaseMountPath
+                dynamicRole: .init(config.database.dynamicRole),
+                enginePath: config.database.mount.path
             )
-            print("Dynamic role '\(dynamicRoleName)' created.")
+            print("Dynamic role '\(config.database.dynamicRole.name)' created.")
         }
 
-        func configureAppRole(vaultClient: VaultClient) async throws {
+        func configureAppRole(config: VaultAdminConfig.Module, vaultClient: VaultClient) async throws {
             // Enable AppRole authentication
-            try await vaultClient.enableAuthMethod(configuration: .init(path: "approle", type: "approle"))
+            try await vaultClient.enableAuthMethod(configuration: .init(config.authMethod.config))
             print("AppRole Authentication enabled.")
 
-            // Create server approle
-            let todoAppRole = "server_app_role"
-            try await vaultClient.createAppRole(.init(
-                name: todoAppRole,
-                secretIdTTL: .seconds(3600),
-                tokenPolicies: ["todos"],
-                tokenTTL: .seconds(3600),
-                tokenType: .service)
-            )
-            print("AppRole '\(todoAppRole)' created.")
 
-            // Create Migrator approle
-            let migratorAppRole = "migrator_app_role"
-            try await vaultClient.createAppRole(.init(
-                name: migratorAppRole,
-                secretIdTTL: .seconds(3600),
-                tokenPolicies: ["migrator"],
-                tokenTTL: .seconds(3600),
-                tokenType: .batch)
-            )
-            print("AppRole '\(migratorAppRole)' created.")
+            for appRole in config.authMethod.appRoles.values {
+                try await vaultClient.createAppRole(.init(appRole.properties))
+                print("AppRole '\(appRole.properties.role_name)' created.")
+            }
         }
     }
 }
