@@ -1,0 +1,6 @@
+amends "package://pkg.pkl-lang.org/github.com/vault-courier/vault-courier-pkl/vault-courier-pkl@0.1.0#/Payloads/AppRoleToken.pkl"
+//amends "@pkl.vault/Payloads/AppRoleToken.pkl"
+
+import "appRole.pkl"
+
+role_name = appRole.role_name
