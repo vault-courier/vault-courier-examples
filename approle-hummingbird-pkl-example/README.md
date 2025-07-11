@@ -57,7 +57,7 @@ In another terminal spin up a PostgreSQL container with docker:
 In the terminal go to root folder of this Package and run the `admin-vault` command line tool. First run the provision:
 
 ```sh
-approle-hummingbird-pkl-example % swift run Operations provision
+approle-hummingbird-pkl-example % PKL_EXEC=/path/to/pkl/binary swift run Operations provision Sources/Operations/Pkl/Stage/vaultAdminConfig.pkl
 
 Policy 'migrator' written.
 Policy 'todos' written.
@@ -73,7 +73,7 @@ Run the approle credentials generation for the Migrator app:
 
 
 ```sh
-approle-hummingbird-pkl-example % swift run Operations credentials migrator
+approle-hummingbird-pkl-example % swift run Operations credentials migrator Sources/Operations/Pkl/Stage/vaultAdminConfig.pkl
 
 Generating Approle credentials for 'migrator' app...
 SecretID successfully written to ./approle_secret_id.txt
@@ -109,7 +109,7 @@ info todos-postgres-tutorial : [HummingbirdCore] Server started and listening on
 
 ### Clean up
 
-You can stop the Vault dev server with `Ctrl+C`, and the postgres container with
+You can stop the Vault dev server with `Ctrl+C` (or kill the Vault process from a command: `pgrep -f vault | xargs kill`), and the postgres container with
 
 ```sh
 % docker stop $(docker ps -f name=learn-postgres -q)
