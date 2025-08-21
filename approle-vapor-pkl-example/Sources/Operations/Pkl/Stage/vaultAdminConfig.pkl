@@ -1,0 +1,43 @@
+//===----------------------------------------------------------------------===//
+//  Copyright (c) 2025 Javier Cuesta
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+//===----------------------------------------------------------------------===//
+
+amends ".../VaultAdminConfig.pkl"
+
+policies {
+  import("App/appPolicy.pkl")
+  import("Migrator/appPolicy.pkl")
+}
+
+database {
+  mount = import("databaseMount.pkl")
+  connection = import("pgConnection.pkl")
+  staticRole = import("App/staticRole.pkl")
+  dynamicRole = import("Migrator/dynamicRole.pkl")
+}
+
+authMethod {
+  config = import("authRoleConfig.pkl")
+  appRoles {
+    ["todo"] {
+      properties = import("App/appRole.pkl")
+      tokenConfig = import("App/appRoleToken.pkl")
+    }
+    ["migrator"] {
+      properties = import("Migrator/appRole.pkl")
+      tokenConfig = import("Migrator/appRoleToken.pkl")
+    }
+  }
+}
