@@ -54,7 +54,7 @@ In another terminal spin up a PostgreSQL container with docker:
     psql -U vault_root -d postgres -c "GRANT CONNECT ON DATABASE postgres TO todos_user;"
 ```
 
-In the terminal go to root folder of this Package and run the `admin-vault` command line tool. First run the provision:
+In the terminal go to root folder of this Package and run the `admin-vault` command line tool. First run the provision with the path to the vault configuration file:
 
 ```sh
 approle-hummingbird-pkl-example % PKL_EXEC=/path/to/pkl/binary swift run Operations provision Sources/Operations/Pkl/Stage/vaultAdminConfig.pkl
@@ -92,7 +92,7 @@ Migration successfull! 'todos' table created.
 Run the approle credentials generation for the Todo app.
 
 ```sh
-approle-hummingbird-pkl-example % swift run Operations credentials todo
+approle-hummingbird-pkl-example % swift run Operations credentials todo Sources/Operations/Pkl/Stage/vaultAdminConfig.pkl
 Generating Approle credentials for 'todo' app...
 SecretID successfully written to ./approle_secret_id.txt
 todo app roleID: 8039d04e-f609-2733-fe7a-ef682d709548
