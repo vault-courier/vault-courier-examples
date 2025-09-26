@@ -17,37 +17,17 @@
 import ArgumentParser
 import OpenAPIAsyncHTTPClient
 import VaultCourier
-#if canImport(FoundationEssentials)
-import FoundationEssentials
-#else
-import struct Foundation.URL
-#endif
 
 @main
 struct read_secret_async_http_client_example: AsyncParsableCommand {
-    static func makeVaultClient() throws -> VaultClient {
-        let vaultURL = URL(string: "http://127.0.0.1:8200/v1")!
-        let config = VaultClient.Configuration(apiURL: vaultURL)
-
-        let client = Client(
-            serverURL: vaultURL,
-            transport: AsyncHTTPClientTransport()
-        )
-
-        return VaultClient(
-            configuration: config,
-            client: client,
-            authentication: .token("education")
-        )
-    }
-
     struct Secret: Codable {
         var apiKey: String
     }
 
     mutating func run() async throws {
-        let vaultClient = try Self.makeVaultClient()
-        try await vaultClient.authenticate()
+        let vaultClient = VaultClient(configuration: .defaultHttp(),
+                                      clientTransport: AsyncHTTPClientTransport())
+        try await vaultClient.login(method: .token("education"))
 
         do {
             guard let secret: Secret = try await vaultClient.readKeyValueSecret(enginePath: "secret", key: "dev-eu-central-1")
