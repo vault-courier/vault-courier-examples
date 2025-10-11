@@ -4,7 +4,7 @@ import PklSwift
 public enum PostgresStaticRole {}
 
 extension PostgresStaticRole {
-    public enum CredentialType: String, CaseIterable, CodingKeyRepresentable, Decodable, Hashable {
+    public enum CredentialType: String, CaseIterable, CodingKeyRepresentable, Decodable, Hashable, Sendable {
         case password = "password"
         case rsa_private_key = "rsa_private_key"
         case client_certificate = "client_certificate"
@@ -13,7 +13,7 @@ extension PostgresStaticRole {
     /// Postgres Static Role
     ///
     /// [Vault Static Role documentation](https://developer.hashicorp.com/vault/api-docs/secret/databases#create-static-role)
-    public struct Module: PklRegisteredType, Decodable, Hashable {
+    public struct Module: PklRegisteredType, Decodable, Hashable, Sendable {
         public static let registeredIdentifier: String = "PostgresStaticRole"
 
         /// The corresponding role in the database of `db_username`
@@ -47,7 +47,7 @@ extension PostgresStaticRole {
         public var rotation_statements: [String]?
 
         /// Specifies the type of credential that will be generated for the role. Options include: `password`,
-        /// `rsa_private_key`, `client_certificate`. See the plugin's API page for credential types supported 
+        /// `rsa_private_key`, `client_certificate`. See the plugin's API page for credential types supported
         /// by individual databases.
         public var credential_type: CredentialType?
 
@@ -77,17 +77,7 @@ extension PostgresStaticRole {
         }
     }
 
-    public struct RotationPeriod: PklRegisteredType, Decodable, Hashable {
-        public static let registeredIdentifier: String = "PostgresStaticRole#RotationPeriod"
-
-        public var period: Duration
-
-        public init(period: Duration) {
-            self.period = period
-        }
-    }
-
-    public struct RotationSchedule: PklRegisteredType, Decodable, Hashable {
+    public struct RotationSchedule: PklRegisteredType, Decodable, Hashable, Sendable {
         public static let registeredIdentifier: String = "PostgresStaticRole#RotationSchedule"
 
         public var schedule: String
@@ -100,7 +90,18 @@ extension PostgresStaticRole {
         }
     }
 
-    public struct PasswordCredential: PklRegisteredType, Decodable, Hashable {
+    /// Specifies the amount of time Vault should wait before rotating the password. The minimum is 5 seconds.
+    public struct RotationPeriod: PklRegisteredType, Decodable, Hashable, Sendable {
+        public static let registeredIdentifier: String = "PostgresStaticRole#RotationPeriod"
+
+        public var period: Duration
+
+        public init(period: Duration) {
+            self.period = period
+        }
+    }
+
+    public struct PasswordCredential: PklRegisteredType, Decodable, Hashable, Sendable {
         public static let registeredIdentifier: String = "PostgresStaticRole#PasswordCredential"
 
         public var passwordPolicy: String?
@@ -110,7 +111,7 @@ extension PostgresStaticRole {
         }
     }
 
-    public struct RSAPrivateKey: PklRegisteredType, Decodable, Hashable {
+    public struct RSAPrivateKey: PklRegisteredType, Decodable, Hashable, Sendable {
         public static let registeredIdentifier: String = "PostgresStaticRole#RSAPrivateKey"
 
         public var key_bits: Int?
@@ -123,7 +124,7 @@ extension PostgresStaticRole {
         }
     }
 
-    public struct ClientCertificate: PklRegisteredType, Decodable, Hashable {
+    public struct ClientCertificate: PklRegisteredType, Decodable, Hashable, Sendable {
         public static let registeredIdentifier: String = "PostgresStaticRole#ClientCertificate"
 
         /// A username template to be used for the client certificate common name.

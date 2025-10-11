@@ -86,7 +86,7 @@ Run the the Migrator app with the `ROLE_ID` obtained from the command before. Ex
 approle-hummingbird-pkl-example % ROLE_ID=323184a0-7665-f89f-6350-aa2c4005dc4c SECRET_ID_FILEPATH=./approle_secret_id.txt swift run Migrator
 
 info migrator : [VaultCourier] login authorized
-Migration successfull! 'todos' table created.
+Migration successful! 'todos' table created.
 ```
 
 Run the approle credentials generation for the Todo app.

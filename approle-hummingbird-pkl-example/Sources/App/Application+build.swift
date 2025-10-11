@@ -37,17 +37,17 @@ public func buildApplication(_ arguments: some AppArguments) async throws -> som
         return logger
     }()
 
-    let secrets = try await connectToVault(logger: logger, arguments: arguments)
+    let config = try await fetchSecrets(logger: logger, arguments: arguments)
 
     var postgresRepository: TodoPostgresRepository?
     let router: Router<AppRequestContext>
     if !arguments.inMemoryTesting {
         let client = PostgresClient(
             configuration: .init(
-                host: "localhost",
-                username: secrets.username,
-                password: secrets.password,
-                database: "postgres",
+                host: config.host,
+                username: config.username,
+                password: config.password,
+                database: config.database,
                 tls: .disable
             ),
             backgroundLogger: logger

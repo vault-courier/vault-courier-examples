@@ -17,7 +17,7 @@
 import VaultCourier
 
 extension PostgresStaticRole.Module {
-    var create: CreateDatabaseStaticRole {
+    var create: DatabaseStaticRoleConfig {
         get throws {
             let rotation: RotationStrategy
             if let rotationPeriod = rotation_period {
@@ -35,13 +35,17 @@ extension PostgresStaticRole.Module {
                 .password
             }
 
-            return .init(vaultRoleName: vault_role_name,
-                         databaseUsername: db_username,
-                         databaseConnectionName: db_connection_name,
-                         rotation: rotation,
-                         rotationStatements: rotation_statements,
-                         credentialType: credentialType,
-                         credentialConfig: credential_config)
+            return .postgres(
+                .init(
+                    vaultRoleName: vault_role_name,
+                    databaseUsername: db_username,
+                    databaseConnectionName: db_connection_name,
+                    rotation: rotation,
+                    rotationStatements: rotation_statements,
+                    credentialType: credentialType,
+                    credentialConfig: credential_config
+                )
+            )
         }
     }
 }

@@ -28,21 +28,6 @@ struct VaultAdmin: AsyncParsableCommand {
             AppRoleCredentials.self
         ]
     )
-    static func makeVaultClient() throws -> VaultClient {
-        let vaultURL = URL(string: "http://127.0.0.1:8200/v1")!
-        let config = VaultClient.Configuration(apiURL: vaultURL)
-
-        let client = Client(
-            serverURL: vaultURL,
-            transport: AsyncHTTPClientTransport()
-        )
-
-        return VaultClient(
-            configuration: config,
-            client: client,
-            authentication: .token("education")
-        )
-    }
 }
 
 extension VaultAdmin {
@@ -65,8 +50,11 @@ extension VaultAdmin {
         }
 
         func run() async throws {
-            let vaultClient = try makeVaultClient()
-            try await vaultClient.authenticate()
+            let vaultClient = VaultClient(
+                configuration: .defaultHttp(),
+                clientTransport: AsyncHTTPClientTransport()
+            )
+            try await vaultClient.login(method: .token("education"))
 
             let vaultConfig = try await VaultAdminConfig.loadFrom(source: .path(config))
 
@@ -80,7 +68,7 @@ extension VaultAdmin {
             print("Generating Approle credentials for '\(app.rawValue)' app...")
 
             // Generate SecretID for the given app
-            let tokenResponse = try await vaultClient.generateAppSecretId(
+            let tokenResponse = try await vaultClient.generateAppSecretID(
                 capabilities: .init(
                     appRole.tokenConfig
                 )
@@ -95,7 +83,7 @@ extension VaultAdmin {
             print("SecretID successfully written to \(outputFile)")
 
             let roleIdResponse = try await vaultClient.appRoleID(name: appRole.properties.role_name)
-            print("'\(app.rawValue)' app roleID: \(roleIdResponse.roleId)")
+            print("'\(app.rawValue)' app roleID: \(roleIdResponse.roleID)")
         }
     }
 
@@ -108,8 +96,11 @@ extension VaultAdmin {
         @Argument var config: String
 
         func run() async throws {
-            let vaultClient = try makeVaultClient()
-            try await vaultClient.authenticate()
+            let vaultClient = VaultClient(
+                configuration: .defaultHttp(),
+                clientTransport: AsyncHTTPClientTransport()
+            )
+            try await vaultClient.login(method: .token("education"))
 
             let config = try await VaultAdminConfig.loadFrom(source: .path(config))
 
@@ -120,7 +111,7 @@ extension VaultAdmin {
 
         func updatePolicies(config: VaultAdminConfig.Module, vaultClient: VaultClient) async throws {
             for policy in config.policies {
-                try await vaultClient.createPolicy(name: policy.name, hclPolicy: policy.payload)
+                try await vaultClient.createPolicy(hcl: .init(name: policy.name, policy: policy.payload))
                 print("Policy '\(policy.name)' written.")
             }
         }
@@ -131,7 +122,7 @@ extension VaultAdmin {
             print("Database secrets engine enabled at '\(config.database.mount.path)'.")
 
             // Create connection between vault and a postgresql database
-            try await vaultClient.databaseConnection(
+            try await vaultClient.createPostgresConnection(
                 configuration: .init(config.database.connection),
                 enginePath: config.database.mount.path
             )
@@ -145,7 +136,7 @@ extension VaultAdmin {
 
             // Create dynamic role
             try await vaultClient.create(
-                dynamicRole: .init(config.database.dynamicRole),
+                dynamicRole: .postgres(.init(config.database.dynamicRole)),
                 enginePath: config.database.mount.path
             )
             print("Dynamic role '\(config.database.dynamicRole.name)' created.")
