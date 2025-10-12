@@ -14,7 +14,7 @@
 //  limitations under the License.
 //===----------------------------------------------------------------------===//
 
-amends "package://pkg.pkl-lang.org/github.com/vault-courier/vault-courier-pkl/vault-courier-pkl@0.1.0#/Payloads/PostgresDatabaseConnection.pkl"
+amends "package://pkg.pkl-lang.org/github.com/vault-courier/vault-courier-pkl/vault-courier-pkl@0.2.0#/Payloads/SecretEngines/Databases/PostgreSQL/PostgresDatabaseConnection.pkl"
 
 connection = "pg_connection"
 host = "127.0.0.1"
