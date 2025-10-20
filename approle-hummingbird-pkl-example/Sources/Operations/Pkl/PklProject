@@ -14,17 +14,18 @@
 //  limitations under the License.
 //===----------------------------------------------------------------------===//
 
-amends "@pkl.vault/Payloads/SystemBackend/Policies/VaultPolicy.pkl"
+/// VaultCourier example with Pkl
+amends "pkl:Project"
 
-import ".../databaseMount.pkl" as databaseMount
+package {
+  name = "isc-vault-operations"
+  baseUri = "package://example.com/\(name)" 
+  version = "0.0.1"
+  packageZipUrl = "https://example.com/\(name)/\(name)@\(version).zip"
+}
 
-name = "todos"
-
-policy {
-  // Read database Secrets
-  ["\(databaseMount.path)/static-creds/*"] {
-    capabilities {
-      "read"
-    }
+dependencies {
+  ["pkl.vault"] { 
+    uri = "package://pkg.pkl-lang.org/github.com/vault-courier/vault-courier-pkl/vault-courier-pkl@0.2.0"
   }
 }

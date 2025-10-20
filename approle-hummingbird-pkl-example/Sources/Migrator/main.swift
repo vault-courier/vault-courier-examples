@@ -49,7 +49,7 @@ do {
 }
 
 // 4. Get dynamic credentials
-let credentials = try await vaultClient.databaseCredentials(dynamicRole: "dynamic_migrator_role", enginePath: "database")
+let credentials = try await vaultClient.databaseCredentials(dynamicRole: "dynamic_migrator_role", mountPath: "database")
 
 // 5. Create PG client
 let pgClient = PostgresClient(

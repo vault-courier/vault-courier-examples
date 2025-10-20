@@ -53,10 +53,7 @@ func fetchSecrets(
     }
 
     // Read database configuration
-    let reader = try vaultClient.makeResourceReader(
-        scheme: "vault",
-        databaseReaderParsers: [.mount("database")]
-    )
+    let reader = try vaultClient.makeDatabaseCredentialReader(mountPath: "database")
 
     let config = try await withEvaluator(options: .preconfigured.withResourceReader(reader)) { evaluator in
         try await TodoConfig.loadFrom(

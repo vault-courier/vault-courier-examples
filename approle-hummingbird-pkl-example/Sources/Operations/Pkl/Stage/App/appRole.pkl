@@ -14,7 +14,7 @@
 //  limitations under the License.
 //===----------------------------------------------------------------------===//
 
-amends "package://pkg.pkl-lang.org/github.com/vault-courier/vault-courier-pkl/vault-courier-pkl@0.2.0#/Payloads/AuthMethods/AppRole/VaultAppRole.pkl"
+amends "@pkl.vault/Payloads/AuthMethods/AppRole/VaultAppRole.pkl"
 
 import ".../authRoleConfig.pkl"
 import "appPolicy.pkl"

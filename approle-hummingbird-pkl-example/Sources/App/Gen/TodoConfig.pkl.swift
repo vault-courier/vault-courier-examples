@@ -1,5 +1,5 @@
 // Code generated from Pkl module `TodoConfig`. DO NOT EDIT.
-@preconcurrency import PklSwift
+import PklSwift
 
 public enum TodoConfig {}
 

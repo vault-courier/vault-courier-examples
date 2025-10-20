@@ -47,7 +47,7 @@ extension PostgresStaticRole {
         public var rotation_statements: [String]?
 
         /// Specifies the type of credential that will be generated for the role. Options include: `password`,
-        /// `rsa_private_key`, `client_certificate`. See the plugin's API page for credential types supported
+        /// `rsa_private_key`, `client_certificate`. See the plugin's API page for credential types supported 
         /// by individual databases.
         public var credential_type: CredentialType?
 

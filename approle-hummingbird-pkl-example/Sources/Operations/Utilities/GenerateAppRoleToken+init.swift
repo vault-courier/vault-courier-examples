@@ -18,7 +18,6 @@ import VaultCourier
 #if canImport(FoundationEssentials)
 import FoundationEssentials
 #else
-import class Foundation.JSONDecoder
 import class Foundation.JSONEncoder
 import struct Foundation.Data
 #endif
