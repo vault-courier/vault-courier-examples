@@ -21,32 +21,17 @@ import Foundation
 
 @main
 struct read_secret_urlsession_example: AsyncParsableCommand {
-    static func makeVaultClient() throws -> VaultClient {
-        let vaultURL = URL(string: "http://127.0.0.1:8200/v1")!
-        let config = VaultClient.Configuration(apiURL: vaultURL)
-
-        let client = Client(
-            serverURL: vaultURL,
-            transport: URLSessionTransport()
-        )
-
-        return VaultClient(
-            configuration: config,
-            client: client,
-            authentication: .token("education")
-        )
-    }
-
     struct Secret: Codable {
         var apiKey: String
     }
 
     mutating func run() async throws {
-        let vaultClient = try Self.makeVaultClient()
-        try await vaultClient.authenticate()
+        let vaultClient = VaultClient(configuration: .defaultHttp(),
+                                      clientTransport: URLSessionTransport())
+        try await vaultClient.login(method: .token("education"))
 
         do {
-            guard let secret: Secret = try await vaultClient.readKeyValueSecret(enginePath: "secret", key: "dev-eu-central-1")
+            guard let secret: Secret = try await vaultClient.readKeyValueSecret(mountPath: "secret", key: "dev-eu-central-1")
             else {
                 fatalError("Unable to read secret. Please check your Vault configuration has the same root token")
             }

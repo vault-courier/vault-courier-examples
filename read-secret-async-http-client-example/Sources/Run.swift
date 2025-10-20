@@ -30,7 +30,7 @@ struct read_secret_async_http_client_example: AsyncParsableCommand {
         try await vaultClient.login(method: .token("education"))
 
         do {
-            guard let secret: Secret = try await vaultClient.readKeyValueSecret(enginePath: "secret", key: "dev-eu-central-1")
+            guard let secret: Secret = try await vaultClient.readKeyValueSecret(mountPath: "secret", key: "dev-eu-central-1")
             else {
                 fatalError("Unable to read secret. Please check your Vault configuration has the same root token")
             }

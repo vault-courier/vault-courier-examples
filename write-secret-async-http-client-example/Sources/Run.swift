@@ -18,11 +18,6 @@ import ArgumentParser
 import AsyncHTTPClient
 import OpenAPIAsyncHTTPClient
 import VaultCourier
-#if canImport(FoundationEssentials)
-import FoundationEssentials
-#else
-import struct Foundation.URL
-#endif
 
 @main
 struct write_secret_async_http_client_example: AsyncParsableCommand {
@@ -32,34 +27,23 @@ struct write_secret_async_http_client_example: AsyncParsableCommand {
     @Option(name: .shortAndLong)
     var secret: String = "my_secret_api_key"
 
-    static func makeVaultClient() throws -> VaultClient {
-        let vaultURL = URL(string: "http://127.0.0.1:8200/v1")!
-        let config = VaultClient.Configuration(apiURL: vaultURL)
-
-        let client = Client(
-            serverURL: vaultURL,
-            transport: AsyncHTTPClientTransport()
-        )
-
-        return VaultClient(
-            configuration: config,
-            client: client,
-            authentication: .token("education")
-        )
-    }
-
     struct Secret: Codable {
         var apiKey: String
     }
 
     mutating func run() async throws {
-        let vaultClient = try Self.makeVaultClient()
-        try await vaultClient.authenticate()
+        let vaultClient = VaultClient(configuration: .defaultHttp(),
+                                      clientTransport: AsyncHTTPClientTransport())
+        try await vaultClient.login(method: .token("education"))
 
         let secret = Secret(apiKey: secret)
 
         do {
-            let response = try await vaultClient.writeKeyValue(secret: secret, key: key)
+            let response = try await vaultClient.writeKeyValue(
+                mountPath: "secret",
+                secret: secret,
+                key: key
+            )
 
             print("""
                 Secret written successfully!

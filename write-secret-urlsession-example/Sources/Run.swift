@@ -21,34 +21,23 @@ import Foundation
 
 @main
 struct write_secret_urlsession_example: AsyncParsableCommand {
-    static func makeVaultClient() throws -> VaultClient {
-        let vaultURL = URL(string: "http://127.0.0.1:8200/v1")!
-        let config = VaultClient.Configuration(apiURL: vaultURL)
-
-        let client = Client(
-            serverURL: vaultURL,
-            transport: URLSessionTransport()
-        )
-
-        return VaultClient(
-            configuration: config,
-            client: client,
-            authentication: .token("education")
-        )
-    }
-
     struct Secret: Codable {
         var apiKey: String
     }
 
     mutating func run() async throws {
-        let vaultClient = try Self.makeVaultClient()
-        try await vaultClient.authenticate()
+        let vaultClient = VaultClient(configuration: .defaultHttp(),
+                                      clientTransport: URLSessionTransport())
+        try await vaultClient.login(method: .token("education"))
 
         let secret = Secret(apiKey: "my_secret_api_key")
 
         do {
-            let response = try await vaultClient.writeKeyValue(secret: secret, key: "dev-eu-central-1")
+            let response = try await vaultClient.writeKeyValue(
+                mountPath: "secret",
+                secret: secret,
+                key: "dev-eu-central-1"
+            )
 
             print("""
                 Secret written successfully!
