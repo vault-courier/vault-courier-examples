@@ -1,5 +1,5 @@
 {
-  "originHash" : "e95b0ee8dc48186fc37abeefa68bebac0e8d7a96f2a9cad6120122dd72c29692",
+  "originHash" : "61e4e5b40fdb1d565ea54a7a1ce3d1d4461fa9e284f395c5627271df66ef3e4a",
   "pins" : [
     {
       "identity" : "openapikit",
@@ -8,24 +8,6 @@
       "state" : {
         "revision" : "da7d3a5ddff0dd8e5e9fdb5585d186d645bcc21b",
         "version" : "3.5.0"
-      }
-    },
-    {
-      "identity" : "pkl-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/pkl-swift",
-      "state" : {
-        "revision" : "d6f08700d66e11c1087a79ec8172b1841b0fc9ca",
-        "version" : "0.4.2"
-      }
-    },
-    {
-      "identity" : "semanticversion",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SwiftPackageIndex/SemanticVersion",
-      "state" : {
-        "revision" : "ea8eea9d89842a29af1b8e6c7677f1c86e72fa42",
-        "version" : "0.4.0"
       }
     },
     {
@@ -110,21 +92,12 @@
       }
     },
     {
-      "identity" : "swift-system",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-system",
-      "state" : {
-        "revision" : "a34201439c74b53f0fd71ef11741af7e7caf01e1",
-        "version" : "1.4.2"
-      }
-    },
-    {
       "identity" : "vault-courier",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vault-courier/vault-courier",
       "state" : {
-        "revision" : "a103feae6ad6a22b7c7d186cd6b5b4fd3e87302e",
-        "version" : "0.2.0"
+        "revision" : "1a5f578a4b49701c876e20909e92ae2a43bd22e3",
+        "version" : "0.3.0"
       }
     },
     {

@@ -4,7 +4,7 @@ An example project using VaultCourier
 
 ## Usage
 
-> Important: This example is deliberately simplified and is intended for illustrative purposes only. In particular, never use a Vault instance in dev-mode in a production environment.
+> Important: This example is intentionally simplified for demonstration purposes and can serve as a helpful starting point for learning. However, never use a Vault instance in `dev` mode in a production environment.
 
 Start your vault instance instance in dev-mode either with Hashicorp Vault
 
@@ -18,7 +18,17 @@ or with OpenBao
 % bao server -dev -dev-root-token-id="education"
 ```
 
-The last argument sets the root token to be equal to "education".
+The last argument sets the root token to be equal to "education". Alternative you can run a docker image with
+
+```sh
+docker run --rm --detach -p 8200:8200 -e 'VAULT_DEV_ROOT_TOKEN_ID=education' hashicorp/vault:latest
+```
+
+or
+
+```sh
+docker run --rm --detach -p 8200:8200 -e 'BAO_DEV_ROOT_TOKEN_ID=education' openbao/openbao:latest
+```
 
 Build and run the VaultCourier client CLI using:
 

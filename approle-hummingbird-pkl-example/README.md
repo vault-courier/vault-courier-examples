@@ -16,42 +16,16 @@ The tutorial [approle-hummingbird-pkl](https://swiftpackageindex.com/vault-couri
 
 For this example we need the `pkl` binary installed (and `pkl-gen-swift` if you want to follow the tutorial). Please visit [https://pkl-lang.org](https://pkl-lang.org/main/current/pkl-cli/index.html#installation) for instructions.
 
-Start your vault instance instance in dev-mode either with Hashicorp Vault
+Run a docker-compose script to start your vault instance in dev-mode either with Hashicorp Vault
 
 ```sh
-% vault server -dev -dev-root-token-id="education"
+Scripts % ./run-services.sh vault
 ```
 
 or with OpenBao
 
 ```sh
-% bao server -dev -dev-root-token-id="education"
-```
-
-In another terminal spin up a PostgreSQL container with docker:
-
-```sh
-% docker pull postgres:latest
-
-% docker run \
-    --detach \
-    --name learn-postgres \
-    -e POSTGRES_USER=vault_root \
-    -e POSTGRES_PASSWORD=root_password \
-    -e POSTGRES_DB=postgres \
-    -e POSTGRES_HOST_AUTH_METHOD='scram-sha-256' \
-    -e POSTGRES_INITDB_ARGS='--auth-host=scram-sha-256' \
-    -p 5432:5432 \
-    --rm \
-    postgres
-
-% docker exec -i \
-    learn-postgres \
-    psql -U vault_root -d postgres -c "CREATE ROLE \"todos_user\" LOGIN PASSWORD 'todos_user_password';"
-
-% docker exec -i \
-    learn-postgres \
-    psql -U vault_root -d postgres -c "GRANT CONNECT ON DATABASE postgres TO todos_user;"
+Scripts % ./run-services.sh bao
 ```
 
 In the terminal go to root folder of this Package and run the `admin-vault` command line tool. First run the provision with the path to the vault configuration file:
@@ -86,7 +60,7 @@ Run the the Migrator app with the `ROLE_ID` obtained from the command before. Ex
 approle-hummingbird-pkl-example % ROLE_ID=323184a0-7665-f89f-6350-aa2c4005dc4c SECRET_ID_FILEPATH=./approle_secret_id.txt swift run Migrator
 
 info migrator : [VaultCourier] login authorized
-Migration successfull! 'todos' table created.
+Migration successful! 'todos' table created.
 ```
 
 Run the approle credentials generation for the Todo app.
@@ -109,9 +83,15 @@ info todos-postgres-tutorial : [HummingbirdCore] Server started and listening on
 
 ### Clean up
 
-You can stop the Vault dev server with `Ctrl+C` (or kill the Vault process from a command: `pgrep -f vault | xargs kill`), and the postgres container with
+You can stop the Vault dev server, and the postgres container with
 
 ```sh
-% docker stop $(docker ps -f name=learn-postgres -q)
+Scripts % docker compose -f compose-vault.yml -p "vault" down --volumes --remove-orphans
+```
+
+or if you started a Bao dev server
+
+```sh
+Scripts % docker compose -f compose-bao.yml -p "bao" down --volumes --remove-orphans
 ```
 

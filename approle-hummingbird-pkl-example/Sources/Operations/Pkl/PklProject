@@ -14,21 +14,18 @@
 //  limitations under the License.
 //===----------------------------------------------------------------------===//
 
-import VaultCourier
+/// VaultCourier example with Pkl
+amends "pkl:Project"
 
-extension EnableAuthMethodConfig {
-    init(_ module: AuthMethodConfig.Module) {
-        let config: [String:String]? = if let config = module.config  {
-            .init(uniqueKeysWithValues: zip(config.keys.map({ $0.rawValue}), config.values))
-        } else {
-            nil
-        }
-        self.init(path: module.path,
-                  type: module.type.rawValue,
-                  description: module.description,
-                  config: config,
-                  options: module.options,
-                  isLocal: module.local ?? false,
-                  sealWrap: module.seal_wrap ?? false)
-    }
+package {
+  name = "isc-vault-operations"
+  baseUri = "package://example.com/\(name)" 
+  version = "0.0.1"
+  packageZipUrl = "https://example.com/\(name)/\(name)@\(version).zip"
+}
+
+dependencies {
+  ["pkl.vault"] { 
+    uri = "package://pkg.pkl-lang.org/github.com/vault-courier/vault-courier-pkl/vault-courier-pkl@0.2.0"
+  }
 }
