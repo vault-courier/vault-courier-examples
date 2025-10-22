@@ -2,7 +2,7 @@
 
 An example project of a Hummingbird server app using VaultCourier and Pkl.
 
-It modifies Hummingbird's Todo example to use VaultCourier to securely fetch the database secrets, and Pkl to seamslessly improve the secret consumption and provision. The later makes Pkl the native config format for this Todo app example. This end-to-end example is the result of the tutorial [approle-hummingbird-pkl](https://swiftpackageindex.com/vault-courier/vault-courier/main/tutorials/vaultcourier/approle-hummingbird-pkl). This package contains the following executables:
+It modifies Hummingbird's Todo example to use VaultCourier to securely fetch the database secrets, and Pkl to seamlessly improve the secret consumption and provision. The later makes Pkl the native config format for this Todo app example. This end-to-end example is the result of the tutorial [approle-hummingbird-pkl](https://swiftpackageindex.com/vault-courier/vault-courier/main/tutorials/vaultcourier/approle-hummingbird-pkl). This package contains the following executables:
 
 1. A **Todo** app using VaultCourier to access database credentials with `Pkl` as main configuration format and secret resource reader.
 2. A **Migrator** app that performs the initial database migrations.
@@ -14,7 +14,7 @@ The tutorial [approle-hummingbird-pkl](https://swiftpackageindex.com/vault-couri
 
 > Important: This example is deliberately simplified and is intended for illustrative purposes only. In particular, never use a Vault instance in dev-mode in a production deployment. It is strongly recommended to create a dedicated database user specifically for Vault to use. Please refer to Hashicorp Vault or Openbao documentation for best practices and production hardening.
 
-For this example we need the `pkl` binary installed (and `pkl-gen-swift` if you want to follow the tutorial). Please visit [https://pkl-lang.org](https://pkl-lang.org/main/current/pkl-cli/index.html#installation) for instructions.
+For this example we need the `pkl` binary installed (and `pkl-gen-swift` if you want to follow the tutorial). Please visit [https://pkl-lang.org](https://pkl-lang.org/main/current/pkl-cli/index.html#installation) for instructions. After installation, go to "/Sources/Operations/Pkl" and run `pkl project resolve`. This will download the pkl dependencies for the VaultOperations cli tool.
 
 Run a docker-compose script to start your vault instance in dev-mode either with Hashicorp Vault
 
@@ -44,7 +44,6 @@ AppRole 'migrator_app_role' created.
 ```
 
 Run the approle credentials generation for the Migrator app:
-
 
 ```sh
 approle-hummingbird-pkl-example % swift run Operations credentials migrator Sources/Operations/Pkl/Stage/vaultAdminConfig.pkl

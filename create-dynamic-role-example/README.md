@@ -49,10 +49,8 @@ Finally, build and run the VaultCourier client CLI using the same arguments as g
 
 ```sh
 % swift build
-% $(swift build --show-bin-path)/create-dynamic-role-example -e "path/to/database/mount" -c "my_connection" -r "read_only"
-lease_id           path/to/database/mount/creds/read_only/TVo0C6muW9bzvlrREx8pZKKr
-lease_duration     3600
-lease_renewable    true
+% $(swift build --show-bin-path)/create-dynamic-role-example -e "path/to/database/mount" -c "my_connection"
+time_to_live       3600.0 seconds
 password           52TkXJAM43E-G7IBgV9c
 username           v-token-read_onl-EkLbrLOfzIiGuIVmtEx9-1746220628 
 ```

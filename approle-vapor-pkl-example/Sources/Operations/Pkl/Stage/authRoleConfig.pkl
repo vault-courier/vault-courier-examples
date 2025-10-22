@@ -14,7 +14,7 @@
 //  limitations under the License.
 //===----------------------------------------------------------------------===//
 
-amends "package://pkg.pkl-lang.org/github.com/vault-courier/vault-courier-pkl/vault-courier-pkl@0.1.0#/Payloads/AuthMethodConfig.pkl"
+amends "@pkl.vault/Payloads/SystemBackend/Auth/AuthMethodConfig.pkl"
 
 path = "approle"
 

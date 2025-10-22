@@ -60,7 +60,7 @@ Finally, build and run the VaultCourier client CLI using the same arguments as g
 % swift build
 % $(swift build --show-bin-path)/create-static-role-example -e "path/to/database/mount" -c "my_connection"
 
-lease_duration     86400
+time_to_live       86400.0 seconds
 lease_renewable    false
 password           52TkXJAM43E-G7IBgV9c
 username           static_role_username 

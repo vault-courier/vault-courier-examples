@@ -35,7 +35,6 @@ let vaultClient = VaultClient(
     clientTransport: AsyncHTTPClientTransport()
 )
 
-
 // 3. Authenticate with vault
 do {
     try await vaultClient.login(

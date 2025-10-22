@@ -28,7 +28,7 @@ extension EnableAuthMethodConfig {
                   description: module.description,
                   config: config,
                   options: module.options,
-                  local: module.local ?? false,
+                  isLocal: module.local ?? false,
                   sealWrap: module.seal_wrap ?? false)
     }
 }

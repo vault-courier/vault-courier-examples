@@ -4,7 +4,7 @@ import PklSwift
 public enum VaultAdminConfig {}
 
 extension VaultAdminConfig {
-    public struct Module: PklRegisteredType, Decodable, Hashable {
+    public struct Module: PklRegisteredType, Decodable, Hashable, Sendable {
         public static let registeredIdentifier: String = "VaultAdminConfig"
 
         public var policies: [VaultPolicy.Module]
@@ -24,7 +24,7 @@ extension VaultAdminConfig {
         }
     }
 
-    public struct DatabaseConfiguration: PklRegisteredType, Decodable, Hashable {
+    public struct DatabaseConfiguration: PklRegisteredType, Decodable, Hashable, Sendable {
         public static let registeredIdentifier: String = "VaultAdminConfig#DatabaseConfiguration"
 
         public var mount: MountConfiguration.Module
@@ -48,7 +48,7 @@ extension VaultAdminConfig {
         }
     }
 
-    public struct AppRoleAuth: PklRegisteredType, Decodable, Hashable {
+    public struct AppRoleAuth: PklRegisteredType, Decodable, Hashable, Sendable {
         public static let registeredIdentifier: String = "VaultAdminConfig#AppRoleAuth"
 
         public var config: AuthMethodConfig.Module
@@ -61,7 +61,7 @@ extension VaultAdminConfig {
         }
     }
 
-    public struct AppRole: PklRegisteredType, Decodable, Hashable {
+    public struct AppRole: PklRegisteredType, Decodable, Hashable, Sendable {
         public static let registeredIdentifier: String = "VaultAdminConfig#AppRole"
 
         public var properties: VaultAppRole.Module

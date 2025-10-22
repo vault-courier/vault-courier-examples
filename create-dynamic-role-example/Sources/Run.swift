@@ -34,44 +34,33 @@ struct create_dynamic_role_example: AsyncParsableCommand {
     var roleName: String = "dynamic_role"
 
     mutating func run() async throws {
-        let vaultClient = try Self.makeVaultClient()
-        try await vaultClient.authenticate()
+        // Create vault client.
+        let vaultClient = VaultClient(
+            configuration: .defaultHttp(),
+            clientTransport: AsyncHTTPClientTransport()
+        )
+        try await vaultClient.login(method: .token("education"))
 
         let creationStatements = [
             #"CREATE ROLE "{{name}}" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}' INHERIT;"#,
             #"GRANT read_only TO "{{name}}";"#
         ]
-        try await vaultClient.create(dynamicRole: .init(vaultRoleName: roleName,
-                                                        databaseConnectionName: connectionName,
-                                                        defaultTTL: .seconds(5*60),
-                                                        maxTTL: .seconds(60*60),
-                                                        creationStatements: creationStatements),
-                                     enginePath: enginePath)
+        try await vaultClient.create(
+            dynamicRole: .postgres(
+                .init(vaultRoleName: roleName,
+                     databaseConnectionName: connectionName,
+                     defaultTimeToLive: .seconds(5*60),
+                     maxTimeToLive: .seconds(60*60),
+                     creationStatements: creationStatements)
+            ),
+            mountPath: enginePath)
 
-        let response = try await vaultClient.databaseCredentials(dynamicRole: roleName, enginePath: enginePath)
+        let response = try await vaultClient.databaseCredentials(dynamicRole: roleName, mountPath: enginePath)
         print("""
-        lease_id           \(response.leaseId ?? "")
-        lease_duration     \(response.leaseDuration ?? 0)
-        lease_renewable    \(response.renewable ?? false)
+        time_to_live       \(response.timeToLive ?? .zero)
         password           \(response.password)
         username           \(response.username)    
         """)
-    }
-
-    static func makeVaultClient() throws -> VaultClient {
-        let vaultURL = URL(string: "http://127.0.0.1:8200/v1")!
-        let config = VaultClient.Configuration(apiURL: vaultURL)
-
-        let client = Client(
-            serverURL: vaultURL,
-            transport: AsyncHTTPClientTransport()
-        )
-
-        return VaultClient(
-            configuration: config,
-            client: client,
-            authentication: .token("education")
-        )
     }
 }
 

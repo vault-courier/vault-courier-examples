@@ -1,5 +1,5 @@
 {
-  "originHash" : "d7eb3b852fa3d2a3e0d69dfed18549b8c2a85e178e939bd11a216243c03cbaa5",
+  "originHash" : "cb083f6a56d77f50a8df04cf4e4eb944565a9135a2603443833f5673def8cfd3",
   "pins" : [
     {
       "identity" : "async-http-client",
@@ -74,15 +74,6 @@
       }
     },
     {
-      "identity" : "pkl-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/pkl-swift",
-      "state" : {
-        "revision" : "e581b0004eccebc55b5b347d5849b6c36022f9b2",
-        "version" : "0.5.0"
-      }
-    },
-    {
       "identity" : "postgres-kit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/postgres-kit.git",
@@ -107,15 +98,6 @@
       "state" : {
         "revision" : "93f7222c8e195cbad39fafb5a0e4cc85a8def7ea",
         "version" : "4.9.2"
-      }
-    },
-    {
-      "identity" : "semanticversion",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SwiftPackageIndex/SemanticVersion",
-      "state" : {
-        "revision" : "3b18d75a3cece558fb98e72d7dd5c83394d86d5b",
-        "version" : "0.5.1"
       }
     },
     {
@@ -366,8 +348,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vault-courier/vault-courier",
       "state" : {
-        "revision" : "db5dfd5f5bddb0f269f1e8f0ecdd235c664d4330",
-        "version" : "0.2.1"
+        "revision" : "1a5f578a4b49701c876e20909e92ae2a43bd22e3",
+        "version" : "0.3.0"
       }
     },
     {
