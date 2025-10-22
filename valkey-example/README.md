@@ -1,8 +1,6 @@
 #  Valkey Integration example
 
-An example project using VaultCourier and Valkey.
-
-OpenBao offers a plugin to manage Valkey database credentials, and in this example uses `vault-courier` to initialize a valkey client from [valkey-swift](https://github.com/valkey-io/valkey-swift). 
+OpenBao provides a plugin for managing Valkey database credentials. This example demonstrates how to use that secret engine together with `vault-courier` to initialize a [valkey-swift](https://github.com/valkey-io/valkey-swift) client.
 
 > Important: This example is deliberately simplified and is intended for illustrative purposes only. In particular, never use a Vault instance in dev-mode in a production deployment. It is strongly recommended to create a dedicated database user specifically for Vault to use. Please refer to Openbao documentation for best practices and production hardening.
 
