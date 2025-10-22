@@ -24,7 +24,7 @@ import Valkey
 struct valkey_example: AsyncParsableCommand {
     static let configuration = CommandConfiguration(
         commandName: "valkey-example",
-        abstract: "Example of managing Valkey secrets with Vault. Run After 'Provision' command.",
+        abstract: "Example of managing Valkey credentials with Vault.",
         subcommands: [
             Provision.self,
             App.self
@@ -37,13 +37,13 @@ enum Constants {
     static let port = 6379
     static let role = "qa_role"
     static let enginePath = "database"
-    static let keyName = "pokemon-count"
+    static let keyName = "likes-count"
 }
 
 extension valkey_example {
     struct App: AsyncParsableCommand {
         static let configuration = CommandConfiguration(
-            abstract: "Application using Valkey which increases a counter",
+            abstract: "Application using ValkeyClient that increases a counter. Run After 'Provision' command.",
         )
 
         mutating func run() async throws {
@@ -129,7 +129,7 @@ extension valkey_example {
                         ----------------------------------------------
                         """)
                     )
-                    // Rotate root
+                    // Rotate root user
                     try await client.rotateRoot(connection: connectionName)
 
                     try await client.create(dynamicRole: .valkey(.init(vaultRoleName: Constants.role,
