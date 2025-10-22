@@ -16,13 +16,13 @@ The tutorial [approle-hummingbird-pkl](https://swiftpackageindex.com/vault-couri
 
 For this example we need the `pkl` binary installed (and `pkl-gen-swift` if you want to follow the tutorial). Please visit [https://pkl-lang.org](https://pkl-lang.org/main/current/pkl-cli/index.html#installation) for instructions. After installation, go to "/Sources/Operations/Pkl" and run `pkl project resolve`. This will download the pkl dependencies for the VaultOperations cli tool.
 
-Run a docker-compose script to start your vault instance in dev-mode either with Hashicorp Vault
+We'll use Docker Compose to spin up a Vault instance and a Postgres database on the same network. Start by copying the [scripts folder](https://github.com/vault-courier/vault-courier-examples/tree/main/scripts) from the `vault-courier-examples` repository and placing it anywhere on your computer. Then, inside that folder, run:
 
 ```sh
 Scripts % ./run-services.sh vault
 ```
 
-or with OpenBao
+or if you prefer an OpenBao instance
 
 ```sh
 Scripts % ./run-services.sh bao
@@ -85,12 +85,12 @@ info todos-postgres-tutorial : [HummingbirdCore] Server started and listening on
 You can stop the Vault dev server, and the postgres container with
 
 ```sh
-Scripts % docker compose -f compose-vault.yml -p "vault" down --volumes --remove-orphans
+scripts % docker compose -f compose-vault.yml -p "vault" down --volumes --remove-orphans
 ```
 
 or if you started a Bao dev server
 
 ```sh
-Scripts % docker compose -f compose-bao.yml -p "bao" down --volumes --remove-orphans
+scripts % docker compose -f compose-bao.yml -p "bao" down --volumes --remove-orphans
 ```
 
