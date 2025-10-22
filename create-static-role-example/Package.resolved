@@ -1,5 +1,5 @@
 {
-  "originHash" : "f390e5abd3cb6c3ab288e33362d6a1028ae6780e3d704de860e47e5578206b40",
+  "originHash" : "1c38500e83acbd2ae9d702e1ce10b1b1642e24762ac842f771dbe5b39537297e",
   "pins" : [
     {
       "identity" : "async-http-client",
@@ -17,24 +17,6 @@
       "state" : {
         "revision" : "da7d3a5ddff0dd8e5e9fdb5585d186d645bcc21b",
         "version" : "3.5.0"
-      }
-    },
-    {
-      "identity" : "pkl-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/pkl-swift",
-      "state" : {
-        "revision" : "d6f08700d66e11c1087a79ec8172b1841b0fc9ca",
-        "version" : "0.4.2"
-      }
-    },
-    {
-      "identity" : "semanticversion",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SwiftPackageIndex/SemanticVersion",
-      "state" : {
-        "revision" : "ea8eea9d89842a29af1b8e6c7677f1c86e72fa42",
-        "version" : "0.4.0"
       }
     },
     {
@@ -195,8 +177,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vault-courier/vault-courier",
       "state" : {
-        "revision" : "a103feae6ad6a22b7c7d186cd6b5b4fd3e87302e",
-        "version" : "0.2.0"
+        "revision" : "1a5f578a4b49701c876e20909e92ae2a43bd22e3",
+        "version" : "0.3.0"
       }
     },
     {

@@ -48,11 +48,11 @@ func connectToVault(
         )
 
         // Alternative Unwrap response
-//        let unwrappedSecretID = try await vaultClient.unwrapAppRoleSecretID(token: secretID)
+//        let unwrappedResponse = try await vaultClient.unwrapAppRoleSecretID(token: secretID)
 //        try await vaultClient.login(
 //            method: .appRole(
 //                path: "approle",
-//                credentials: .init(roleID: roleID, secretID: unwrappedSecretID.secretID)
+//                credentials: .init(roleID: roleID, secretID: unwrappedResponse.secretID)
 //            )
 //        )
     }

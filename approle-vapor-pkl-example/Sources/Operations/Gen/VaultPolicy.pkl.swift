@@ -4,7 +4,7 @@ import PklSwift
 public enum VaultPolicy {}
 
 extension VaultPolicy {
-    public enum Capability: String, CaseIterable, CodingKeyRepresentable, Decodable, Hashable {
+    public enum Capability: String, CaseIterable, CodingKeyRepresentable, Decodable, Hashable, Sendable {
         case create = "create"
         case read = "read"
         case update = "update"
@@ -13,7 +13,7 @@ extension VaultPolicy {
         case sudo = "sudo"
     }
 
-    public struct Module: PklRegisteredType, Decodable, Hashable {
+    public struct Module: PklRegisteredType, Decodable, Hashable, Sendable {
         public static let registeredIdentifier: String = "VaultPolicy"
 
         /// Policy name
@@ -27,7 +27,7 @@ extension VaultPolicy {
         }
     }
 
-    public struct PathPolicy: PklRegisteredType, Decodable, Hashable {
+    public struct PathPolicy: PklRegisteredType, Decodable, Hashable, Sendable {
         public static let registeredIdentifier: String = "VaultPolicy#PathPolicy"
 
         public var capabilities: [Capability]

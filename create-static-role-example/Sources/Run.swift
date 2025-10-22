@@ -34,38 +34,31 @@ struct create_static_role_example: AsyncParsableCommand {
     var roleName: String = "static_role"
 
     mutating func run() async throws {
-        let vaultClient = try Self.makeVaultClient()
-        try await vaultClient.authenticate()
+        // Create vault client.
+        let vaultClient = VaultClient(
+            configuration: .defaultHttp(),
+            clientTransport: AsyncHTTPClientTransport()
+        )
+        try await vaultClient.login(method: .token("education"))
 
-        try await vaultClient.create(staticRole: .init(vaultRoleName: roleName,
-                                                       databaseUsername: "static_role_username",
-                                                       databaseConnectionName: connectionName,
-                                                       rotation: .period(.seconds(60*60*24))),
-                                     enginePath: enginePath)
+        try await vaultClient.create(
+            staticRole: .postgres(
+                .init(vaultRoleName: roleName,
+                      databaseUsername: "static_role_username",
+                      databaseConnectionName: connectionName,
+                      rotation: .period(.seconds(60*60*24)))
+            ),
+            mountPath: enginePath
+        )
 
-        let response = try await vaultClient.databaseCredentials(staticRole: roleName, enginePath: enginePath)
+        let response = try await vaultClient.databaseCredentials(staticRole: roleName,
+                                                                 mountPath: enginePath)
         print("""
-        lease_renewable    \(response.renewable ?? false)
+        time_to_live       \(response.timeToLive)
         password           \(response.password)
         username           \(response.username)    
         rotation           \(String(describing: response.rotation))
         """)
-    }
-
-    static func makeVaultClient() throws -> VaultClient {
-        let vaultURL = URL(string: "http://127.0.0.1:8200/v1")!
-        let config = VaultClient.Configuration(apiURL: vaultURL)
-
-        let client = Client(
-            serverURL: vaultURL,
-            transport: AsyncHTTPClientTransport()
-        )
-
-        return VaultClient(
-            configuration: config,
-            client: client,
-            authentication: .token("education")
-        )
     }
 }
 

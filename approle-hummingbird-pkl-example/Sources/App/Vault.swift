@@ -47,6 +47,15 @@ func fetchSecrets(
                 credentials: .init(roleID: roleID, secretID: secretID)
             )
         )
+
+        // Alternative Unwrap response
+//        let unwrappedResponse = try await vaultClient.unwrapAppRoleSecretID(token: secretID)
+//        try await vaultClient.login(
+//            method: .appRole(
+//                path: "approle",
+//                credentials: .init(roleID: roleID, secretID: unwrappedResponse.secretID)
+//            )
+//        )
     }
     catch {
         fatalError("❌ The app could not log in to Vault. Open investigation 🕵️")

@@ -17,11 +17,6 @@
 import ArgumentParser
 import OpenAPIAsyncHTTPClient
 import VaultCourier
-#if canImport(FoundationEssentials)
-import FoundationEssentials
-#else
-import struct Foundation.URL
-#endif
 
 @main
 struct configure_pg_connection_example: AsyncParsableCommand {
@@ -32,43 +27,37 @@ struct configure_pg_connection_example: AsyncParsableCommand {
     var connectionName: String = "pg_connection"
 
     mutating func run() async throws {
-        let vaultClient = try Self.makeVaultClient()
-        try await vaultClient.authenticate()
+        // Create vault client.
+        let vaultClient = VaultClient(
+            configuration: .defaultHttp(),
+            clientTransport: AsyncHTTPClientTransport()
+        )
+        // Authenticate with vault
+        do {
+            try await vaultClient.login(method: .token("education"))
+        }
+        catch {
+            fatalError("❌ The app could not log in to Vault. Open investigation 🕵️")
+        }
 
         do {
             try await vaultClient.enableSecretEngine(mountConfig: .init(mountType: "database", path: enginePath))
             print("Database secret engine enabled at \(enginePath)")
 
             let config = Self.postgresConnectionConfiguration(connectionName)
-            try await vaultClient.databaseConnection(configuration: config, enginePath: enginePath)
+            try await vaultClient.createPostgresConnection(configuration: config, mountPath: enginePath)
             print("""
             Success! Data written to: \(enginePath)/config/\(connectionName)
             """)
 
-            let connection = try await vaultClient.databaseConnection(name: connectionName, enginePath: enginePath)
+            let connection = try await vaultClient.postgresConnection(name: connectionName, mountPath: enginePath)
             print(connection)
         } catch {
             print("Unable to write secret: " + String(reflecting: error))
         }
     }
 
-    static func makeVaultClient() throws -> VaultClient {
-        let vaultURL = URL(string: "http://127.0.0.1:8200/v1")!
-        let config = VaultClient.Configuration(apiURL: vaultURL)
-
-        let client = Client(
-            serverURL: vaultURL,
-            transport: AsyncHTTPClientTransport()
-        )
-
-        return VaultClient(
-            configuration: config,
-            client: client,
-            authentication: .token("education")
-        )
-    }
-
-    static func postgresConnectionConfiguration(_ name: String) -> PostgresConnectionConfiguration {
+    static func postgresConnectionConfiguration(_ name: String) -> PostgresConnectionConfig {
         let host = "127.0.0.1"
         let port = 5432
         let databaseName = "postgres"
@@ -76,17 +65,17 @@ struct configure_pg_connection_example: AsyncParsableCommand {
         let connectionURL = "postgresql://{{username}}:{{password}}@\(host):\(port)/\(databaseName)?sslmode=\(sslMode)"
         let vaultUsername = "vault_root"
         let vaultPassword = "root_password"
-        let config = PostgresConnectionConfiguration(connection: name,
-                                                     allowedRoles: ["dynamic_role", "static_role"],
-                                                     connectionUrl: connectionURL,
-                                                     username: vaultUsername,
-                                                     password: vaultPassword,
-                                                     passwordAuthentication: .scramSHA256)
+        let config = PostgresConnectionConfig(connection: name,
+                                              allowedRoles: ["dynamic_role", "static_role"],
+                                              connectionUrl: connectionURL,
+                                              username: vaultUsername,
+                                              password: vaultPassword,
+                                              passwordAuthentication: .scramSHA256)
         return config
     }
 }
 
-extension DatabaseConnectionResponse: @retroactive CustomDebugStringConvertible {
+extension PostgresConnectionResponse: @retroactive CustomDebugStringConvertible {
     public var debugDescription: String {
         return """
                 allowed_roles: \(allowedRoles)
