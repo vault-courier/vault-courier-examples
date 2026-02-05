@@ -58,7 +58,6 @@ Run the the Migrator app with the `ROLE_ID` obtained from the command before. Ex
 ```sh
 approle-hummingbird-pkl-example % ROLE_ID=323184a0-7665-f89f-6350-aa2c4005dc4c SECRET_ID_FILEPATH=./approle_secret_id.txt swift run Migrator
 
-info migrator : [VaultCourier] login authorized
 Migration successful! 'todos' table created.
 ```
 
@@ -76,7 +75,6 @@ With the `ROLE_ID` you obtain from the previous step we are ready to run the Tod
 ```sh
 approle-hummingbird-pkl-example % PKL_EXEC=/path/to/pkl/binary ROLE_ID=8039d04e-f609-2733-fe7a-ef682d709548 SECRET_ID_FILEPATH=./approle_secret_id.txt swift run App
 
-info todos-postgres-tutorial : [VaultCourier] login authorized
 info todos-postgres-tutorial : [HummingbirdCore] Server started and listening on 127.0.0.1:8080
 ```
 

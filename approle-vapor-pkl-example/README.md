@@ -76,7 +76,6 @@ With the `ROLE_ID` you obtain from the previous step we are ready to run the Tod
 ```sh
 approle-vapor-pkl-example % PKL_EXEC=/path/to/pkl/binary ROLE_ID=8039d04e-f609-2733-fe7a-ef682d709548 SECRET_ID_FILEPATH=./approle_secret_id.txt swift run App
 
-[ INFO ] login authorized
 [ NOTICE ] Server started on http://127.0.0.1:8080
 ```
 
