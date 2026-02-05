@@ -23,7 +23,6 @@ After downloading this example, run the **provision** command from the projectâ€
 ```sh
 swift-config-example % swift run swift-config-example provision
 
-info Provision: [VaultCourier] login authorized
 info Provision: [swift_config_example] Secret written successfully at /secret/third_party_service
 ```
 
@@ -32,7 +31,6 @@ Next, we'll run an app that uses `swift-configuration` as main config format. It
 ```sh
 swift-config-example % swift run swift-config-example app
 
-info App: [VaultCourier] login authorized
 info App: [swift_config_example] third_party.service.api_key: secret_api_key_stored_in_vault
 ```
 

@@ -17,7 +17,6 @@ After downloading this example, run the **provision** command from the projectâ€
 ```sh
 % swift run valkey-example provision
 
-info VaultClient: [VaultCourier] login authorized
 info VaultClient: [valkey_example] Database secret engine enabled at database
 info VaultClient: [valkey_example] Success! Data written to: database/config/valkey_connection
 info VaultClient: [valkey_example] connection details ---
@@ -34,9 +33,8 @@ info VaultClient: [valkey_example] Success! Dynamic role 'qa_role' created.
 Next, we'll run an app that uses `valkey-swift` to increment a "likes counter" in the Valkey database. The Vault client requests OpenBao to generate a new Valkey user and return the credentials. The app then uses those credentials to increase and retrieve the counterâ€™s value.
 
 ```
-swift run valkey-example app
+% swift run valkey-example app
 
-info App: [VaultCourier] login authorized
 info App: [valkey_example] Valkey credentials fetched successfully: RoleCredentialsResponse(requestID: "3b34a44d-1b09-d8e4-e068-bab74cd27ac8", username: "V_TOKEN_QA_ROLE_RZHTDTBVAEI6460A89AB_1761152156", password: "M14--FRsxG1Z4SIzXw7i", timeToLive: nil)
 info App: [valkey_example] likes-count created
 info App: [valkey_example] likes-count increased by ten
