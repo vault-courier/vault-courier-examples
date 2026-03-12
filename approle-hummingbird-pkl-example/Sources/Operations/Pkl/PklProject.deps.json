@@ -1,6 +1,13 @@
 {
   "schemaVersion": 1,
   "resolvedDependencies": {
+    "package://pkg.pkl-lang.org/pkl-swift/pkl.swift@0": {
+      "type": "remote",
+      "uri": "projectpackage://pkg.pkl-lang.org/pkl-swift/pkl.swift@0.8.2",
+      "checksums": {
+        "sha256": "3f84b50313eacf6181ef16fb99b757fff0bdb14b086d543e8c5fe8d88184543a"
+      }
+    },
     "package://pkg.pkl-lang.org/github.com/vault-courier/vault-courier-pkl/vault-courier-pkl@0": {
       "type": "remote",
       "uri": "projectpackage://pkg.pkl-lang.org/github.com/vault-courier/vault-courier-pkl/vault-courier-pkl@0.2.0",
